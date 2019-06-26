@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Repl.Commanding;
-using Microsoft.Repl.ConsoleHandling;
 using Microsoft.Repl.Tests.Mocks;
 using Moq;
 using Xunit;
@@ -17,7 +16,6 @@ namespace Microsoft.Repl.Tests
             string previousCommand = "set base \"https://localhost:44366/\"";
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.UpArrow, false, false, false);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 0,
                 previousCommand: previousCommand,
                 nextCommand: null,
                 out CancellationTokenSource cancellationTokenSource);
@@ -34,7 +32,6 @@ namespace Microsoft.Repl.Tests
             string previousCommand = "set base \"https://localhost:44366/\"";
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.UpArrow, false, false, false);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 0,
                 previousCommand: previousCommand,
                 nextCommand: null,
                 out CancellationTokenSource cancellationTokenSource);
@@ -54,7 +51,6 @@ namespace Microsoft.Repl.Tests
             string nextCommand = "get";
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.DownArrow, false, false, false);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 0,
                 previousCommand: null,
                 nextCommand: nextCommand,
                 out CancellationTokenSource cancellationTokenSource);
@@ -70,7 +66,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.Delete, false, false, false);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 2,
                 previousCommand: null,
                 nextCommand: null,
                 out CancellationTokenSource cancellationTokenSource);
@@ -80,6 +75,8 @@ namespace Microsoft.Repl.Tests
 
             IShellState shellState = shell.ShellState;
             shellState.InputManager.SetInput(shellState, inputBufferTextBeforeKeyPress);
+
+            shellState.ConsoleManager.MoveCaret(2);
 
             await shell.RunAsync(cancellationTokenSource.Token).ConfigureAwait(false);
 
@@ -92,7 +89,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.Backspace, false, false, false);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 2,
                 previousCommand: null,
                 nextCommand: null,
                 out CancellationTokenSource cancellationTokenSource);
@@ -102,6 +98,8 @@ namespace Microsoft.Repl.Tests
 
             IShellState shellState = shell.ShellState;
             shellState.InputManager.SetInput(shellState, inputBufferTextBeforeKeyPress);
+
+            shellState.ConsoleManager.MoveCaret(2);
 
             await shell.RunAsync(cancellationTokenSource.Token).ConfigureAwait(false);
 
@@ -114,7 +112,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.Escape, false, false, false);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 0,
                 previousCommand: null,
                 nextCommand: null,
                 out CancellationTokenSource cancellationTokenSource);
@@ -136,7 +133,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.U, false, false, true);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 0,
                 previousCommand: null,
                 nextCommand: null,
                 out CancellationTokenSource cancellationTokenSource);
@@ -158,7 +154,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.Insert, false, false, false);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 0,
                 previousCommand: null,
                 nextCommand: null,
                 out CancellationTokenSource cancellationTokenSource);
@@ -174,7 +169,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.F1, false, false, false);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 0,
                 previousCommand: null,
                 nextCommand: null,
                 out CancellationTokenSource cancellationTokenSource);
@@ -195,7 +189,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.Tab, false, false, false);
             Shell shell = CreateShell(consoleKeyInfo,
-                 caretPosition: 0,
                  previousCommand: null,
                  nextCommand: null,
                  out CancellationTokenSource cancellationTokenSource);
@@ -221,7 +214,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.Tab, true, false, false);
             Shell shell = CreateShell(consoleKeyInfo,
-                 caretPosition: 0,
                  previousCommand: null,
                  nextCommand: null,
                  out CancellationTokenSource cancellationTokenSource);
@@ -247,7 +239,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.Tab, false, false, false);
             Shell shell = CreateShell(consoleKeyInfo,
-                 caretPosition: 0,
                  previousCommand: null,
                  nextCommand: null,
                  out CancellationTokenSource cancellationTokenSource);
@@ -268,7 +259,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.Tab, true, false, false);
             Shell shell = CreateShell(consoleKeyInfo,
-                 caretPosition: 0,
                  previousCommand: null,
                  nextCommand: null,
                  out CancellationTokenSource cancellationTokenSource);
@@ -289,8 +279,7 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.Enter, false, false, false);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 0,
-                previousCommand: null,
+                  previousCommand: null,
                 nextCommand: null,
                 out CancellationTokenSource cancellationTokenSource);
 
@@ -309,7 +298,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.LeftArrow, false, false, false);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 3,
                 previousCommand: null,
                 nextCommand: null,
                 out CancellationTokenSource cancellationTokenSource);
@@ -319,9 +307,11 @@ namespace Microsoft.Repl.Tests
             IShellState shellState = shell.ShellState;
             shellState.InputManager.SetInput(shellState, inputBufferContents);
 
+            shellState.ConsoleManager.MoveCaret(3);
+
             await shell.RunAsync(cancellationTokenSource.Token).ConfigureAwait(false);
 
-            VerifyMoveCaretMethodWasCalledOnce(shellState, -1, Times.Once());
+            Assert.Equal(-1, shellState.ConsoleManager.CaretPosition);
         }
 
         [Fact]
@@ -329,7 +319,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.LeftArrow, false, false, true);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 7,
                 previousCommand: null,
                 nextCommand: null,
                 out CancellationTokenSource cancellationTokenSource);
@@ -339,9 +328,11 @@ namespace Microsoft.Repl.Tests
             IShellState shellState = shell.ShellState;
             shellState.InputManager.SetInput(shellState, inputBufferContents);
 
+            shellState.ConsoleManager.MoveCaret(7);
+
             await shell.RunAsync(cancellationTokenSource.Token).ConfigureAwait(false);
 
-            VerifyMoveCaretMethodWasCalledOnce(shellState, -3, Times.Once());
+            Assert.Equal(-3, shellState.ConsoleManager.CaretPosition);
         }
 
         [Fact]
@@ -349,7 +340,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.RightArrow, false, false, false);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 3,
                 previousCommand: null,
                 nextCommand: null,
                 out CancellationTokenSource cancellationTokenSource);
@@ -359,9 +349,11 @@ namespace Microsoft.Repl.Tests
             IShellState shellState = shell.ShellState;
             shellState.InputManager.SetInput(shellState, inputBufferContents);
 
+            shellState.ConsoleManager.MoveCaret(3);
+
             await shell.RunAsync(cancellationTokenSource.Token).ConfigureAwait(false);
 
-            VerifyMoveCaretMethodWasCalledOnce(shellState, 1, Times.Once());
+            Assert.Equal(1, shellState.ConsoleManager.CaretPosition);
         }
 
         [Fact]
@@ -369,7 +361,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.RightArrow, false, false, true);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 4,
                 previousCommand: null,
                 nextCommand: null,
                 out CancellationTokenSource cancellationTokenSource);
@@ -379,9 +370,11 @@ namespace Microsoft.Repl.Tests
             IShellState shellState = shell.ShellState;
             shellState.InputManager.SetInput(shellState, inputBufferContents);
 
+            shellState.ConsoleManager.MoveCaret(4);
+
             await shell.RunAsync(cancellationTokenSource.Token).ConfigureAwait(false);
 
-            VerifyMoveCaretMethodWasCalledOnce(shellState, 5, Times.Once());
+            Assert.Equal(5, shellState.ConsoleManager.CaretPosition);
         }
 
         [Fact]
@@ -389,7 +382,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.Home, false, false, false);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 3,
                 previousCommand: null,
                 nextCommand: null,
                 out CancellationTokenSource cancellationTokenSource);
@@ -399,10 +391,11 @@ namespace Microsoft.Repl.Tests
             IShellState shellState = shell.ShellState;
             shellState.InputManager.SetInput(shellState, inputBufferContents);
 
+            shellState.ConsoleManager.MoveCaret(3);
+
             await shell.RunAsync(cancellationTokenSource.Token).ConfigureAwait(false);
 
-            // The first method call is from SetInput(..) and the second one is from End key press event
-            VerifyMoveCaretMethodWasCalledOnce(shellState, -3, Times.Exactly(2));
+            Assert.Equal(-3, shellState.ConsoleManager.CaretPosition);
         }
 
         [Fact]
@@ -410,7 +403,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.A, false, false, true);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 3,
                 previousCommand: null,
                 nextCommand: null,
                 out CancellationTokenSource cancellationTokenSource);
@@ -420,10 +412,11 @@ namespace Microsoft.Repl.Tests
             IShellState shellState = shell.ShellState;
             shellState.InputManager.SetInput(shellState, inputBufferContents);
 
+            shellState.ConsoleManager.MoveCaret(3);
+
             await shell.RunAsync(cancellationTokenSource.Token).ConfigureAwait(false);
 
-            // The first method call is from SetInput(..) and the second one is from End key press event
-            VerifyMoveCaretMethodWasCalledOnce(shellState, -3, Times.Exactly(2));
+            Assert.Equal(-3, shellState.ConsoleManager.CaretPosition);
         }
 
         [Fact]
@@ -431,7 +424,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.End, false, false, false);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 3,
                 previousCommand: null,
                 nextCommand: null,
                 out CancellationTokenSource cancellationTokenSource);
@@ -441,9 +433,11 @@ namespace Microsoft.Repl.Tests
             IShellState shellState = shell.ShellState;
             shellState.InputManager.SetInput(shellState, inputBufferContents);
 
+            shellState.ConsoleManager.MoveCaret(3);
+
             await shell.RunAsync(cancellationTokenSource.Token).ConfigureAwait(false);
 
-            VerifyMoveCaretMethodWasCalledOnce(shellState, 32, Times.Once());
+            Assert.Equal(32, shellState.ConsoleManager.CaretPosition);
         }
 
         [Fact]
@@ -451,7 +445,6 @@ namespace Microsoft.Repl.Tests
         {
             ConsoleKeyInfo consoleKeyInfo = new ConsoleKeyInfo('\0', ConsoleKey.E, false, false, true);
             Shell shell = CreateShell(consoleKeyInfo,
-                caretPosition: 3,
                 previousCommand: null,
                 nextCommand: null,
                 out CancellationTokenSource cancellationTokenSource);
@@ -461,24 +454,22 @@ namespace Microsoft.Repl.Tests
             IShellState shellState = shell.ShellState;
             shellState.InputManager.SetInput(shellState, inputBufferContents);
 
+            shellState.ConsoleManager.MoveCaret(3);
+
             await shell.RunAsync(cancellationTokenSource.Token).ConfigureAwait(false);
 
-            VerifyMoveCaretMethodWasCalledOnce(shellState, 32, Times.Once());
+            Assert.Equal(32, shellState.ConsoleManager.CaretPosition);
         }
 
-        private Shell CreateShell(ConsoleKeyInfo consoleKeyInfo, int caretPosition, string previousCommand, string nextCommand, out CancellationTokenSource cancellationTokenSource)
+        private Shell CreateShell(ConsoleKeyInfo consoleKeyInfo,
+            string previousCommand,
+            string nextCommand,
+            out CancellationTokenSource cancellationTokenSource)
         {
             var defaultCommandDispatcher = DefaultCommandDispatcher.Create(x => { }, new object());
 
-            Mock<IConsoleManager> mockConsoleManager = new Mock<IConsoleManager>();
-            var cts = new CancellationTokenSource();
-            CancellationToken cancellationToken = cts.Token;
-            mockConsoleManager.Setup(s => s.ReadKey(cancellationToken))
-                .Callback(() => cts.Cancel()) // This is required as we want to break the loop in StartAsync(..) in InputManager after intended key press event, so that Shell.RunAsync() returns
-                .Returns(consoleKeyInfo);
-            mockConsoleManager.Setup(s => s.CaretPosition)
-                .Returns(caretPosition);
-            mockConsoleManager.Setup(s => s.Error.Write(It.IsAny<char>()));
+            cancellationTokenSource = new CancellationTokenSource();
+            MockConsoleManager mockConsoleManager = new MockConsoleManager(consoleKeyInfo, cancellationTokenSource);
 
             Mock<ICommandHistory> mockCommandHistory = new Mock<ICommandHistory>();
             mockCommandHistory.Setup(s => s.GetPreviousCommand())
@@ -487,19 +478,10 @@ namespace Microsoft.Repl.Tests
                 .Returns(nextCommand);
 
             ShellState shellState = new ShellState(defaultCommandDispatcher,
-                consoleManager: mockConsoleManager.Object,
+                consoleManager: mockConsoleManager,
                 commandHistory: mockCommandHistory.Object);
 
-            cancellationTokenSource = cts;
-
             return new Shell(shellState);
-        }
-
-        private void VerifyMoveCaretMethodWasCalledOnce(IShellState shellState, int caretPosition, Times times)
-        {
-            Mock<IConsoleManager> consoleMananger = Mock.Get(shellState.ConsoleManager);
-
-            consoleMananger.Verify(s => s.MoveCaret(caretPosition), times);
         }
     }
 }
